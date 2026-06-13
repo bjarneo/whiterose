@@ -1,6 +1,7 @@
 const header = document.querySelector("[data-header]");
 const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".nav");
+const copyButtons = document.querySelectorAll("[data-copy]");
 const revealItems = document.querySelectorAll(".reveal");
 
 const updateHeader = () => {
@@ -26,6 +27,45 @@ nav?.addEventListener("click", (event) => {
 
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeMenu();
+});
+
+const copyText = async (text) => {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.setAttribute("readonly", "");
+  textArea.style.position = "fixed";
+  textArea.style.opacity = "0";
+  document.body.append(textArea);
+  textArea.select();
+  document.execCommand("copy");
+  textArea.remove();
+};
+
+copyButtons.forEach((button) => {
+  button.addEventListener("click", async () => {
+    const text = button.getAttribute("data-copy");
+    if (!text) return;
+
+    const defaultLabel = button.textContent ?? "Copy";
+
+    try {
+      await copyText(text);
+      button.textContent = "Copied";
+      window.setTimeout(() => {
+        button.textContent = defaultLabel;
+      }, 1600);
+    } catch {
+      button.textContent = "Failed";
+      window.setTimeout(() => {
+        button.textContent = defaultLabel;
+      }, 1600);
+    }
+  });
 });
 
 if ("IntersectionObserver" in window) {
