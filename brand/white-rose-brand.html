@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>White Rose Brand</title>
+    <style>
+      :root {
+        --black: #000000;
+        --white: #ffffff;
+        --text: #111111;
+        --muted: #555555;
+        --line: #d8d8d8;
+        --surface: #f4f4f4;
+        --display: "Arial Narrow", "Liberation Sans Narrow", "DejaVu Sans Condensed", sans-serif;
+        --body: "DejaVu Sans Mono", "Liberation Mono", monospace;
+      }
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 210mm;
+        margin: 0;
+        color: var(--text);
+        background: var(--white);
+        font-family: var(--body);
+        font-size: 10pt;
+        line-height: 1.55;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: var(--display);
+        font-weight: 900;
+        line-height: 0.95;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin-bottom: 16mm;
+        color: var(--white);
+        font-size: 42pt;
+        letter-spacing: -0.04em;
+      }
+
+      h2 {
+        margin-bottom: 7mm;
+        font-size: 22pt;
+        letter-spacing: -0.035em;
+      }
+
+      h3 {
+        margin-bottom: 2.5mm;
+        font-size: 11pt;
+        letter-spacing: -0.01em;
+      }
+
+      p {
+        margin-bottom: 5mm;
+        color: var(--muted);
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        break-after: page;
+      }
+
+      .page:last-child {
+        break-after: auto;
+      }
+
+      .cover {
+        display: grid;
+        padding: 14mm;
+        color: var(--white);
+        background: var(--black);
+        border: 1px solid var(--black);
+      }
+
+      .cover-inner {
+        display: grid;
+        align-content: space-between;
+        min-height: 269mm;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        padding: 16mm;
+      }
+
+      .cover-logo {
+        width: 42mm;
+        height: 42mm;
+        object-fit: contain;
+      }
+
+      .cover-meta {
+        display: grid;
+        gap: 3mm;
+        color: #a8a8a8;
+        font-size: 8pt;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .cover-copy {
+        max-width: 122mm;
+      }
+
+      .cover-copy p {
+        color: #d0d0d0;
+        font-size: 11pt;
+      }
+
+      .document-page {
+        padding: 14mm;
+      }
+
+      .page-header,
+      .page-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 4mm;
+      }
+
+      .page-footer {
+        margin-top: 12mm;
+        border-top: 1px solid var(--line);
+        border-bottom: 0;
+        padding-top: 5mm;
+        padding-bottom: 0;
+        color: var(--muted);
+        font-size: 7.5pt;
+      }
+
+      .small-logo {
+        width: 14mm;
+        height: 14mm;
+        object-fit: contain;
+      }
+
+      .doc-label,
+      .section-label,
+      .meta-label {
+        font-size: 7.5pt;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .doc-label,
+      .section-label {
+        color: var(--text);
+      }
+
+      .section {
+        padding: 8mm 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: 34mm 1fr;
+        gap: 14mm;
+      }
+
+      .wide-copy {
+        max-width: 138mm;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8mm;
+      }
+
+      .service-list,
+      .rule-list {
+        display: grid;
+        gap: 0;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 1px solid var(--line);
+      }
+
+      .service-list li,
+      .rule-list li {
+        display: grid;
+        grid-template-columns: 16mm 1fr;
+        gap: 6mm;
+        padding: 3.5mm 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .rule-list li {
+        grid-template-columns: 1fr;
+        padding: 3.5mm 0;
+      }
+
+      .number {
+        color: var(--muted);
+        font-size: 8pt;
+      }
+
+      .swatch-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4mm;
+      }
+
+      .swatch {
+        min-height: 30mm;
+        border: 1px solid var(--line);
+        padding: 4mm;
+      }
+
+      .swatch.black {
+        color: var(--white);
+        background: var(--black);
+        border-color: var(--black);
+      }
+
+      .swatch.white {
+        background: var(--white);
+      }
+
+      .swatch.muted {
+        background: #9a9a9a;
+      }
+
+      .swatch.surface {
+        background: var(--surface);
+      }
+
+      .logo-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8mm;
+      }
+
+      .logo-box {
+        display: grid;
+        place-items: center;
+        min-height: 58mm;
+        border: 1px solid var(--line);
+        background: var(--surface);
+      }
+
+      .logo-box.dark {
+        background: var(--black);
+        border-color: var(--black);
+      }
+
+      .logo-box img {
+        width: 34mm;
+        height: 34mm;
+        object-fit: contain;
+      }
+
+      .note {
+        margin-top: 5mm;
+        padding: 5mm;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page cover">
+      <div class="cover-inner">
+        <img class="cover-logo" src="../site/assets/logo-512.png" alt="White Rose logo">
+        <div class="cover-copy">
+          <p class="cover-meta">Brand guide / White Rose / 2026</p>
+          <h1>White Rose</h1>
+          <p>Software engineering consultancy for technical direction, architecture review, hands-on development, and DevSecOps.</p>
+        </div>
+        <div class="cover-meta">
+          <span>whiterose.no</span>
+          <span>bjarne@oever.li</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="page document-page">
+      <header class="page-header">
+        <img class="small-logo" src="../site/assets/logo-192.png" alt="White Rose logo">
+        <span class="doc-label">Brand Overview</span>
+      </header>
+
+      <section class="section section-grid">
+        <p class="section-label">Company</p>
+        <div class="wide-copy">
+          <h2>Software engineering consultancy.</h2>
+          <p>White Rose reviews software systems, plans technical work, clarifies engineering decisions, and delivers hands-on development with DevSecOps.</p>
+        </div>
+      </section>
+
+      <section class="section section-grid">
+        <p class="section-label">Services</p>
+        <ul class="service-list">
+          <li>
+            <span class="number">01</span>
+            <div>
+              <h3>Technical direction</h3>
+              <p>Help decide what to build, what to simplify, and what to avoid.</p>
+            </div>
+          </li>
+          <li>
+            <span class="number">02</span>
+            <div>
+              <h3>Architecture review</h3>
+              <p>Review systems, codebases, and infrastructure.</p>
+            </div>
+          </li>
+          <li>
+            <span class="number">03</span>
+            <div>
+              <h3>Development</h3>
+              <p>Build features, integrations, backend services, and internal tooling.</p>
+            </div>
+          </li>
+          <li>
+            <span class="number">04</span>
+            <div>
+              <h3>DevSecOps</h3>
+              <p>Support deployment, infrastructure, automation, reliability, and security workflows.</p>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <section class="section section-grid">
+        <p class="section-label">Working Model</p>
+        <ul class="rule-list">
+          <li>Understand the system.</li>
+          <li>Explain the tradeoffs.</li>
+          <li>Help decide what to build, simplify, or avoid.</li>
+          <li>Support implementation when needed.</li>
+          <li>Keep recommendations clear and practical.</li>
+        </ul>
+      </section>
+
+      <footer class="page-footer">
+        <span>White Rose</span>
+        <span>Brand guide / 01</span>
+      </footer>
+    </section>
+
+    <section class="page document-page">
+      <header class="page-header">
+        <img class="small-logo" src="../site/assets/logo-192.png" alt="White Rose logo">
+        <span class="doc-label">Visual System</span>
+      </header>
+
+      <section class="section section-grid">
+        <p class="section-label">Direction</p>
+        <div class="wide-copy">
+          <h2>Black, white, sharp, minimal.</h2>
+          <p>The visual direction uses strong typography, clear spacing, thin borders, and the White Rose logo as the main visual mark.</p>
+          <p>Avoid gradients, color accents, soft decorative elements, stock imagery, and unnecessary effects.</p>
+        </div>
+      </section>
+
+      <section class="section section-grid">
+        <p class="section-label">Color</p>
+        <div class="swatch-row">
+          <div class="swatch black">
+            <span class="meta-label">Black</span>
+            <p>#000000</p>
+          </div>
+          <div class="swatch white">
+            <span class="meta-label">White</span>
+            <p>#ffffff</p>
+          </div>
+          <div class="swatch muted">
+            <span class="meta-label">Muted</span>
+            <p>#9a9a9a</p>
+          </div>
+          <div class="swatch surface">
+            <span class="meta-label">Surface</span>
+            <p>#f4f4f4</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-grid">
+        <p class="section-label">Typography</p>
+        <div class="two-col">
+          <div>
+            <h3>Display</h3>
+            <p>Use condensed, hard, uppercase headings. Keep headings short.</p>
+          </div>
+          <div>
+            <h3>Body</h3>
+            <p>Use plain monospaced or neutral sans text. Keep copy direct and factual.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-grid">
+        <p class="section-label">Name</p>
+        <div class="wide-copy">
+          <h2>Use White Rose.</h2>
+          <p>Use `White Rose` as the primary written name. `Whiterose` can be used as a secondary styling when needed.</p>
+          <p>The name should be tied to clear software engineering work, not floral or decorative language.</p>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <span>White Rose</span>
+        <span>Brand guide / 02</span>
+      </footer>
+    </section>
+
+    <section class="page document-page">
+      <header class="page-header">
+        <img class="small-logo" src="../site/assets/logo-192.png" alt="White Rose logo">
+        <span class="doc-label">Logo Usage</span>
+      </header>
+
+      <section class="section section-grid">
+        <p class="section-label">Logo</p>
+        <div>
+          <div class="logo-panel">
+            <div class="logo-box">
+              <img src="../site/assets/logo-512.png" alt="White Rose logo on light background">
+            </div>
+            <div class="logo-box dark">
+              <img src="../site/assets/logo-512.png" alt="White Rose logo on dark background">
+            </div>
+          </div>
+          <p class="note">Use the existing PNG logo assets. Keep the mark square and preserve equal padding on all sides.</p>
+        </div>
+      </section>
+
+      <section class="section section-grid">
+        <p class="section-label">Rules</p>
+        <ul class="rule-list">
+          <li>Use PNG assets only.</li>
+          <li>Do not stretch, skew, rotate, recolor, or crop the logo tighter.</li>
+          <li>Do not add shadows, glows, outlines, or effects.</li>
+          <li>Do not place the logo over photography or patterns.</li>
+          <li>Keep at least one quarter of the logo width as clear space around the mark.</li>
+        </ul>
+      </section>
+
+      <section class="section section-grid">
+        <p class="section-label">Contact</p>
+        <div class="wide-copy">
+          <h2>Need help with a technical decision?</h2>
+          <p>bjarne@oever.li</p>
+          <p>More information: oever.li</p>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <span>White Rose</span>
+        <span>Brand guide / 03</span>
+      </footer>
+    </section>
+  </body>
+</html>
