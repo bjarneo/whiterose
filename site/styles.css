@@ -365,6 +365,7 @@ p {
 .statement,
 .work,
 .principles,
+.signals,
 .contact {
   padding: var(--section-y) 0;
   border-bottom: var(--border);
@@ -786,6 +787,7 @@ p {
   .statement,
   .work,
   .principles,
+  .signals,
   .contact {
     padding: var(--section-y-mobile) 0;
   }
