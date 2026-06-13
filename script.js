@@ -51,18 +51,18 @@ copyButtons.forEach((button) => {
     const text = button.getAttribute("data-copy");
     if (!text) return;
 
-    const defaultLabel = button.textContent ?? "Copy";
-
     try {
       await copyText(text);
-      button.textContent = "Copied";
+      button.classList.add("is-copied");
+      button.setAttribute("aria-label", "Email address copied");
       window.setTimeout(() => {
-        button.textContent = defaultLabel;
+        button.classList.remove("is-copied");
+        button.setAttribute("aria-label", "Copy email address");
       }, 1600);
     } catch {
-      button.textContent = "Failed";
+      button.setAttribute("aria-label", "Could not copy email address");
       window.setTimeout(() => {
-        button.textContent = defaultLabel;
+        button.setAttribute("aria-label", "Copy email address");
       }, 1600);
     }
   });
