@@ -599,7 +599,7 @@ p {
     --font-size-h2: clamp(1.45rem, 8vw, 2.15rem);
     --font-size-lead: 0.95rem;
     --line-height-tight: 0.94;
-    --section-y-mobile: 36px;
+    --section-y-mobile: 30px;
   }
 
   body::before {
@@ -616,9 +616,9 @@ p {
     display: grid;
     grid-template-columns: 44px minmax(0, 1fr) 44px;
     align-items: center;
-    gap: var(--space-3);
-    margin-top: var(--space-4);
-    padding-bottom: var(--space-4);
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding-bottom: var(--space-3);
     border-bottom-color: var(--color-line);
   }
 
@@ -721,8 +721,8 @@ p {
   }
 
   .page {
-    padding-top: 126px;
-    padding-bottom: var(--space-8);
+    padding-top: 112px;
+    padding-bottom: var(--space-6);
   }
 
   .identity-rail {
@@ -730,12 +730,12 @@ p {
   }
 
   .hero {
-    padding-top: var(--space-10);
-    padding-bottom: var(--space-10);
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-8);
   }
 
   .section-head {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-5);
   }
 
   .lead,
@@ -757,8 +757,8 @@ p {
 
   .service {
     grid-template-columns: 1fr;
-    gap: var(--space-2);
-    padding: var(--space-5) 0;
+    gap: var(--space-1);
+    padding: var(--space-4) 0;
   }
 
   .service p {
@@ -767,11 +767,11 @@ p {
 
   .principle {
     min-height: 0;
-    padding: var(--space-5);
+    padding: var(--space-4);
   }
 
   .principle h3 {
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--space-4);
   }
 
   .contact-link {
