@@ -79,9 +79,16 @@ The system uses hard condensed display fonts for headings and monospaced fonts f
 | `--font-size-h3` | Service and principle titles |
 | `--font-size-lead` | Hero paragraph |
 | `--font-size-body` | Service descriptions and contact links |
+| `--font-size-principle` | Principle panel body copy |
 | `--font-size-small` | Rail metadata values |
 | `--font-size-label` | Labels, eyebrow text, row numbers |
 | `--font-size-nav` | Navigation links |
+| `--font-size-nav-mobile` | Mobile navigation links |
+| `--font-size-nav-tiny` | Very small viewport navigation links |
+| `--font-size-brand` | Desktop brand text |
+| `--font-size-brand-mobile` | Mobile brand text |
+| `--font-size-brand-tiny` | Very small viewport brand text |
+| `--font-size-button` | Button text |
 
 Tracking and line-height tokens:
 
@@ -216,7 +223,7 @@ The identity rail is a desktop structural element.
 Desktop:
 
 - Shows the large logo
-- Shows short metadata: practice and focus
+- Shows short metadata: practice and a focused bullet list
 - Uses a right border to separate the rail from content
 
 Mobile:
@@ -261,6 +268,17 @@ Implementation detail:
 - `.statement p:not(.section-label)` is explicitly placed in grid column 2 on desktop
 - It resets to a normal single column on tablet/mobile
 
+### About
+
+The About section is intentionally short.
+
+Rules:
+
+- Keep it to one sentence
+- Link to `https://oever.li` from the section body
+- Do not put the external link directly in the navigation
+- Use the same layout pattern as `.statement`
+
 ### Service Rows
 
 Services are numbered rows.
@@ -270,7 +288,7 @@ Current services:
 - Technical direction
 - Architecture review
 - Development
-- DevOps
+- DevSecOps
 
 Rules:
 
@@ -413,7 +431,7 @@ Mobile rules:
 
 ## Content Voice
 
-White Rose is positioned as a software engineering consultancy that also does hands-on development and DevOps.
+White Rose is positioned as a software engineering consultancy that also does hands-on development and DevSecOps.
 
 Use:
 
@@ -421,7 +439,7 @@ Use:
 - Short sentences
 - Specific service names
 - Clear descriptions of work
-- Words like consultancy, development, DevOps, architecture, review, delivery
+- Words like consultancy, development, DevSecOps, architecture, review, delivery
 
 Avoid:
 

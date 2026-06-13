@@ -1,19 +1,19 @@
 # White Rose
 
-White Rose, also styled as Whiterose, is a software engineering consultancy focused on technical direction, architecture review, hands-on development, and DevOps.
+White Rose, also styled as Whiterose, is a software engineering consultancy focused on technical direction, architecture review, hands-on development, and DevSecOps.
 
 Website: https://whiterose.no
 
 ## What White Rose Does
 
-White Rose helps teams review software systems, plan technical work, make clear engineering decisions, and deliver hands-on development and DevOps work.
+White Rose reviews software systems, plans technical work, clarifies engineering decisions, and delivers hands-on development with DevSecOps.
 
 Core consultancy work includes:
 
 - Technical direction
 - Architecture review
 - Hands-on software development
-- DevOps, infrastructure, automation, and reliability work
+- DevSecOps, infrastructure, automation, security, and reliability work
 - Codebase, infrastructure, and process assessment
 
 ## Brand Position

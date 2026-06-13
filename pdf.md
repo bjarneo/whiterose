@@ -12,7 +12,7 @@ Use this guide for:
 - Statements of work
 - Technical audits
 - Architecture reviews
-- DevOps reviews
+- DevSecOps reviews
 - Project summaries
 - Invoices and payment documents
 - One-page capability documents
