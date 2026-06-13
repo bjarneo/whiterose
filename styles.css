@@ -532,11 +532,12 @@ p {
     justify-content: center;
     justify-self: center;
     min-width: 0;
+    font-size: 0.95rem;
   }
 
   .brand-mark {
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
   }
 
   .menu-toggle {
@@ -698,7 +699,7 @@ p {
   }
 
   .brand {
-    font-size: 0.72rem;
+    font-size: 0.86rem;
   }
 
   .nav a {
