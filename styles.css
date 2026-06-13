@@ -504,7 +504,7 @@ p {
     --font-size-h2: clamp(1.45rem, 8vw, 2.15rem);
     --font-size-lead: 0.95rem;
     --line-height-tight: 0.94;
-    --section-y-mobile: 46px;
+    --section-y-mobile: 36px;
   }
 
   body::before {
@@ -629,7 +629,12 @@ p {
   }
 
   .hero {
-    padding-top: var(--space-14);
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-10);
+  }
+
+  .section-head {
+    margin-bottom: var(--space-6);
   }
 
   .lead,
@@ -652,7 +657,7 @@ p {
   .service {
     grid-template-columns: 1fr;
     gap: var(--space-2);
-    padding: var(--space-6) 0;
+    padding: var(--space-5) 0;
   }
 
   .service p {
