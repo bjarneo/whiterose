@@ -515,11 +515,15 @@ p {
   .site-header {
     position: absolute;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--space-3);
     margin-top: var(--space-4);
     padding-bottom: var(--space-4);
     border-bottom-color: var(--color-line);
+  }
+
+  .brand {
+    justify-content: center;
   }
 
   .nav {
@@ -538,19 +542,8 @@ p {
     padding-bottom: var(--space-8);
   }
 
-  .rail-mark {
-    width: 44px;
-    height: 44px;
-    margin-bottom: var(--space-6);
-  }
-
-  .identity-rail dl {
-    grid-template-columns: 1fr;
-    gap: var(--space-3);
-  }
-
-  .identity-rail dd {
-    max-width: 280px;
+  .identity-rail {
+    display: none;
   }
 
   .hero {
