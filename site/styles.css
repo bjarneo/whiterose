@@ -504,7 +504,7 @@ p {
   }
 
   body::before {
-    inset: var(--space-1);
+    display: none;
   }
 
   .site-header,
