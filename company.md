@@ -18,6 +18,26 @@ White Rose reviews software systems, plans technical work, clarifies engineering
 - DevSecOps
 - Infrastructure, automation, reliability, and security workflows
 
+## Brand
+
+White Rose should be presented as clear, technical, restrained, and practical.
+
+The brand uses a black-and-white visual system, direct language, and minimal design. It should not feel decorative, loud, or like a generic agency.
+
+## Visual Direction
+
+The visual direction is black and white, sharp, and minimal. Use strong typography, clear spacing, thin borders, and the White Rose logo as the main visual mark.
+
+Avoid gradients, color accents, soft decorative elements, stock imagery, and unnecessary effects.
+
+## Name Notes
+
+Use `White Rose` as the primary written name.
+
+`Whiterose` can be used as a secondary styling when needed, but the company should be presented consistently as `White Rose` in business documents and public copy.
+
+The name should be tied to clear software engineering work, not floral or decorative language.
+
 ## How The Work Is Done
 
 - Understand the system
