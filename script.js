@@ -1,4 +1,6 @@
 const header = document.querySelector("[data-header]");
+const menuToggle = document.querySelector(".menu-toggle");
+const nav = document.querySelector(".nav");
 const revealItems = document.querySelectorAll(".reveal");
 
 const updateHeader = () => {
@@ -7,6 +9,24 @@ const updateHeader = () => {
 
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
+
+const closeMenu = () => {
+  header?.classList.remove("is-menu-open");
+  menuToggle?.setAttribute("aria-expanded", "false");
+};
+
+menuToggle?.addEventListener("click", () => {
+  const isOpen = header?.classList.toggle("is-menu-open") ?? false;
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+});
+
+nav?.addEventListener("click", (event) => {
+  if (event.target instanceof HTMLAnchorElement) closeMenu();
+});
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeMenu();
+});
 
 if ("IntersectionObserver" in window) {
   const observer = new IntersectionObserver(
