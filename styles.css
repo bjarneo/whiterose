@@ -16,8 +16,15 @@
   --font-body: "Berkeley Mono", "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
   --font-size-label: 0.68rem;
   --font-size-nav: 0.72rem;
+  --font-size-nav-mobile: 0.68rem;
+  --font-size-nav-tiny: 0.62rem;
+  --font-size-brand: 0.78rem;
+  --font-size-brand-mobile: 0.95rem;
+  --font-size-brand-tiny: 0.86rem;
+  --font-size-button: 0.7rem;
   --font-size-small: 0.8rem;
   --font-size-body: 0.9rem;
+  --font-size-principle: 0.86rem;
   --font-size-lead: 1rem;
   --font-size-h3: 1rem;
   --font-size-h2: clamp(1.55rem, 2.6vw, 2.7rem);
@@ -104,6 +111,13 @@ a {
   text-decoration: none;
 }
 
+.text-link {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+
 h1,
 h2,
 h3,
@@ -179,7 +193,7 @@ p {
 
 .brand {
   gap: var(--space-2);
-  font-size: 0.78rem;
+  font-size: var(--font-size-brand);
   font-weight: 700;
   letter-spacing: var(--tracking-nav);
   text-transform: uppercase;
@@ -265,6 +279,29 @@ p {
   line-height: 1.6;
 }
 
+.focus-list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.focus-list li {
+  position: relative;
+  padding-left: var(--space-4);
+}
+
+.focus-list li::before {
+  position: absolute;
+  top: 0.75em;
+  left: 0;
+  width: 6px;
+  height: 1px;
+  content: "";
+  background: var(--color-text);
+}
+
 .content {
   min-width: 0;
 }
@@ -303,7 +340,7 @@ p {
   padding: 0 var(--button-x);
   border: var(--border);
   color: var(--color-text);
-  font-size: 0.7rem;
+  font-size: var(--font-size-button);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -403,7 +440,7 @@ p {
 
 .principle p {
   margin-bottom: 0;
-  font-size: 0.86rem;
+  font-size: var(--font-size-principle);
 }
 
 .contact {
@@ -532,7 +569,7 @@ p {
     justify-content: center;
     justify-self: center;
     min-width: 0;
-    font-size: 0.95rem;
+    font-size: var(--font-size-brand-mobile);
   }
 
   .brand-mark {
@@ -621,7 +658,7 @@ p {
   }
 
   .nav a {
-    font-size: 0.68rem;
+    font-size: var(--font-size-nav-mobile);
     letter-spacing: 0.08em;
   }
 
@@ -699,11 +736,11 @@ p {
   }
 
   .brand {
-    font-size: 0.86rem;
+    font-size: var(--font-size-brand-tiny);
   }
 
   .nav a {
-    font-size: 0.62rem;
+    font-size: var(--font-size-nav-tiny);
   }
 }
 
