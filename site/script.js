@@ -3,6 +3,93 @@ const menuToggle = document.querySelector(".menu-toggle");
 const nav = document.querySelector(".nav");
 const copyButtons = document.querySelectorAll("[data-copy]");
 const revealItems = document.querySelectorAll(".reveal");
+const themeToggle = document.querySelector("[data-theme-toggle]");
+const themeLabel = document.querySelector("[data-theme-label]");
+const themeColorMetas = document.querySelectorAll('meta[name="theme-color"]');
+const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+const themeStorageKey = "white-rose-theme";
+
+const getStoredTheme = () => {
+  try {
+    const theme = localStorage.getItem(themeStorageKey);
+    return theme === "light" || theme === "dark" ? theme : "system";
+  } catch {
+    return "system";
+  }
+};
+
+const getResolvedTheme = (theme) => {
+  if (theme === "system") return systemTheme.matches ? "dark" : "light";
+  return theme;
+};
+
+const getNextTheme = (theme) => {
+  const cycle = systemTheme.matches ? ["system", "light", "dark"] : ["system", "dark", "light"];
+  return cycle[(cycle.indexOf(theme) + 1) % cycle.length];
+};
+
+const updateThemeColor = (theme, resolvedTheme) => {
+  const colors = { light: "#fbfaf7", dark: "#000000" };
+
+  themeColorMetas.forEach((meta, index) => {
+    if (theme === "system") {
+      meta.setAttribute("content", index === 0 ? colors.light : colors.dark);
+      meta.setAttribute("media", index === 0 ? "(prefers-color-scheme: light)" : "(prefers-color-scheme: dark)");
+      return;
+    }
+
+    meta.setAttribute("content", colors[resolvedTheme]);
+    if (index === 0) {
+      meta.removeAttribute("media");
+    } else {
+      meta.setAttribute("media", "not all");
+    }
+  });
+};
+
+const applyTheme = (theme) => {
+  const resolvedTheme = getResolvedTheme(theme);
+  const label = theme === "system" ? "System" : theme[0].toUpperCase() + theme.slice(1);
+  document.documentElement.dataset.themeState = theme;
+
+  if (theme === "system") {
+    delete document.documentElement.dataset.theme;
+  } else {
+    document.documentElement.dataset.theme = theme;
+  }
+
+  updateThemeColor(theme, resolvedTheme);
+
+  if (!themeToggle || !themeLabel) return;
+
+  const nextTheme = getNextTheme(theme);
+  themeLabel.textContent = label;
+  themeToggle.setAttribute(
+    "aria-label",
+    `Theme: ${theme}, currently ${resolvedTheme}. Click to use ${nextTheme}.`
+  );
+};
+
+let selectedTheme = getStoredTheme();
+applyTheme(selectedTheme);
+
+themeToggle?.addEventListener("click", () => {
+  selectedTheme = getNextTheme(selectedTheme);
+
+  try {
+    if (selectedTheme === "system") {
+      localStorage.removeItem(themeStorageKey);
+    } else {
+      localStorage.setItem(themeStorageKey, selectedTheme);
+    }
+  } catch {}
+
+  applyTheme(selectedTheme);
+});
+
+systemTheme.addEventListener("change", () => {
+  applyTheme(selectedTheme);
+});
 
 const updateHeader = () => {
   header?.classList.toggle("is-scrolled", window.scrollY > 12);

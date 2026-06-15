@@ -16,7 +16,16 @@
       name="description"
       content="White Rose provides software engineering consultancy, hands-on development, DevSecOps, technical direction, and architecture review."
     >
-    <meta name="theme-color" content="#000000">
+    <script>
+      try {
+        const theme = localStorage.getItem("white-rose-theme");
+        if (theme === "light" || theme === "dark") {
+          document.documentElement.dataset.theme = theme;
+        }
+      } catch {}
+    </script>
+    <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
     <meta name="application-name" content="White Rose">
     <meta name="apple-mobile-web-app-title" content="White Rose">
     <link rel="canonical" href="https://whiterose.no/">
@@ -150,17 +159,23 @@
         <img class="brand-mark" src="assets/logo.svg" alt="White Rose logo">
         <span>White Rose</span>
       </a>
-      <button class="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false">
-        <span>Menu</span>
-        <span class="menu-icon" aria-hidden="true"></span>
-      </button>
-      <nav class="nav" id="primary-nav" aria-label="Primary navigation">
-        <a href="#work">Work</a>
-        <a href="#principles">Principles</a>
-        <a href="#about">About</a>
-        <a href="#media">Media</a>
-        <a href="#contact">Contact</a>
-      </nav>
+      <div class="header-actions">
+        <nav class="nav" id="primary-nav" aria-label="Primary navigation">
+          <a href="#work">Work</a>
+          <a href="#principles">Principles</a>
+          <a href="#about">About</a>
+          <a href="#media">Media</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <button class="theme-toggle" type="button" data-theme-toggle>
+          <span class="theme-indicator" aria-hidden="true"></span>
+          <span data-theme-label>System</span>
+        </button>
+        <button class="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false">
+          <span>Menu</span>
+          <span class="menu-icon" aria-hidden="true"></span>
+        </button>
+      </div>
     </header>
 
     <main class="page" id="top">
