@@ -18,6 +18,10 @@ White Rose reviews software systems, plans technical work, clarifies engineering
 - DevSecOps
 - Infrastructure, automation, reliability, and security workflows
 
+## Products
+
+- [ContextOwl](https://contextowl.co) is a product owned by White Rose.
+
 ## Brand
 
 White Rose should be presented as clear, technical, restrained, and practical.
