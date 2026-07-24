@@ -435,6 +435,10 @@ p {
   margin-bottom: 0;
 }
 
+.products {
+  padding-top: var(--space-12);
+}
+
 .section-head {
   align-items: end;
   margin-bottom: var(--space-8);
@@ -465,6 +469,20 @@ p {
   max-width: 560px;
   margin-bottom: 0;
   font-size: var(--font-size-body);
+}
+
+.product-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: fit-content;
+}
+
+.product-logo {
+  width: var(--space-11);
+  height: var(--space-11);
+  filter: var(--brand-mark-filter);
+  object-fit: contain;
 }
 
 .principle-grid {
@@ -937,6 +955,10 @@ p {
   .media,
   .contact {
     padding: var(--section-y-mobile) 0;
+  }
+
+  .products {
+    padding-top: var(--space-6);
   }
 
   .media-card {
