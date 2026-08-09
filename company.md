@@ -21,6 +21,7 @@ White Rose reviews software systems, plans technical work, clarifies engineering
 ## Products
 
 - [ContextOwl](https://contextowl.co) is a product owned by White Rose.
+- [Finnfisk](https://finnfisk.no) is a sport fishing guide for Innlandet, owned by White Rose.
 
 ## Brand
 
