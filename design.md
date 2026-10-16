@@ -342,19 +342,31 @@ Logo assets live in `site/assets/`.
 
 | Asset | Use |
 | --- | --- |
-| `logo.png` | Source square web logo |
-| `logo-512.png` | Large interface/logo asset |
-| `logo-256.png` | Medium logo asset |
-| `logo-192.png` | Header logo and Android-style icon size |
+| `logo.svg` | White mark on transparent background, media download |
+| `logo-black.svg` | Black mark on transparent background, media download |
+| `logo-small.svg` | Simplified white mark for the header and other small sizes |
+| `logo.png` | 1024px square tile, white mark on black |
+| `logo-512.png` | Large tile, schema.org logo and PDF covers |
+| `logo-256.png` | Medium tile |
+| `logo-192.png` | Small tile, PDF page headers |
 | `apple-touch-icon.png` | Apple touch icon |
+| `favicon.svg` | Scalable favicon |
 | `favicon-32.png` | 32px favicon |
 | `favicon-16.png` | 16px favicon |
 | `favicon.ico` | Browser fallback favicon |
 | `og-image.png` | Social preview image |
+| `white-rose-wallpaper.png` | 3840x2160 desktop wallpaper |
+
+To render a PNG tile from the SVG mark, run:
+
+```sh
+rsvg-convert -w 512 -h 512 -b '#000000' site/assets/logo.svg -o site/assets/logo-512.png
+```
 
 Logo rules:
 
-- Use PNG assets, not SVG
+- Use the SVG marks on the website
+- Use the PNG tiles in documents and on white backgrounds
 - Keep the logo square
 - Preserve equal padding on all sides
 - Use the logo only in black and white
@@ -460,12 +472,12 @@ When adding a new section or component:
 - Keep it monochrome
 - Keep copy short
 - Check mobile at `640px` and below
-- Verify no gradients or SVG logo references are introduced
+- Verify no gradients are introduced
 - Push both `main` and `gh-pages` when deploying site changes
 
 Before shipping:
 
 - Check `site/index.html` for visible domain links if not intended
 - Check `site/styles.css` for gradients or one-off color additions
-- Check `site/assets/` for correct PNG logo usage
+- Check `site/assets/` for correct logo usage
 - Check GitHub Pages build status after deployment
