@@ -1,340 +1,334 @@
 # White Rose Design System
 
-A strict black-and-white design system for a software engineering consultancy.
+The website is a dark dot-matrix page that you control with a rotary dial.
 
-This document describes how the current website is designed and implemented. The source of truth for implementation is `site/styles.css`, where all core decisions are expressed as CSS custom properties in `:root`.
+This document describes how the current website looks and works. The source of truth is the code in `site/`. Colors and type live as CSS custom properties in `site/styles.css`. The dial, the canvas, and all input live in `site/script.js`.
+
+Documents and PDFs do not follow this file. They stay black and white. See `pdf.md`.
 
 ## Intent
 
 White Rose should feel clear, technical, quiet, and deliberate.
 
-The design should not feel like a generic agency site. It should feel like an engineering practice: direct, structured, and easy to trust.
+The dial and the dot grid make the site look like a technical tool, not a marketing page. The page shows one idea at a time. The copy stays plain and factual.
 
 ## Core Rules
 
-- Black and white only
-- No gradients
-- No decorative color accents
-- No soft marketing visuals
-- No rounded pill-heavy UI
-- Use borders, spacing, weight, and hierarchy for emphasis
-- Keep copy plain and factual
-- Prefer rows, rails, and editorial structure over cards
+- Use a near-black or warm off-white background with a fixed dot grid
+- Use one accent color, rose, for the active state only
+- Show one section at a time
+- Separate items with dotted rules, not cards or boxes
+- Use pill-shaped buttons
+- Give text a halo in the background color so that it reads over the dots
+- Do not use gradient fills or decorative images
+- Do not add a second accent color
+- Keep copy short and factual
 
 ## Implementation Model
 
-The website is implemented as a static site in `site/`.
+The website is a static site in `site/`. There is no build step. A push to `main` runs `.github/workflows/pages.yml`, which deploys `site/` to GitHub Pages.
 
 | File | Purpose |
 | --- | --- |
-| `site/index.html` | Semantic page structure, metadata, content |
-| `site/styles.css` | Design system tokens, layout, components, responsive behavior |
-| `site/script.js` | Header scroll state, mobile menu, reveal behavior |
-| `site/assets/` | Logo, favicon, Apple icon, social preview image |
+| `site/index.html` | Metadata, the inline theme script, and all section content |
+| `site/styles.css` | Color, type, and layout tokens, and all component styles |
+| `site/script.js` | Canvas drawing, dial physics, input, theme, sound, and the contact sheet |
+| `site/assets/` | Logos, favicons, the social image, and the wallpaper |
 
-The CSS is organized around token categories:
+The page has 3 layers inside `[data-root]`:
 
-- Color tokens
-- Typography tokens
-- Layout tokens
-- Spacing tokens
-- Component tokens
-- Responsive overrides
-
-When changing the site, update or reuse tokens before adding one-off values.
+1. The canvas draws the dot grid, the dial, the readout, the waves, and the ripple.
+2. The UI layer holds the header, the content panel, the dial labels, and the hint.
+3. The contact sheet covers the page when it is open.
 
 ## Color Tokens
 
-The palette is monochrome by design.
+The page has a dark and a light theme. `:root` holds the dark values. `:root[data-theme="light"]` holds the light values.
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `--color-bg` | `#000000` | Page background |
-| `--color-text` | `#ffffff` | Primary text, active UI, logo contrast |
-| `--color-muted` | `#9a9a9a` | Paragraphs, secondary text |
-| `--color-faint` | `#5f5f5f` | Low-priority numbers and metadata |
-| `--color-line` | `rgba(255, 255, 255, 0.18)` | Default borders |
-| `--color-line-strong` | `rgba(255, 255, 255, 0.52)` | Hover and emphasis borders |
-| `--color-surface` | `rgba(255, 255, 255, 0.045)` | Subtle panel fill |
-| `--color-header` | `rgba(0, 0, 0, 0.9)` | Mobile/scrolled header background |
+| Token | Dark | Light | Use |
+| --- | --- | --- | --- |
+| `--bg` | `#080808` | `#eeece6` | Page background, text halo, primary button text |
+| `--fg` | `#edebe6` | `#131312` | Text, dots, primary button fill |
+| `--accent` | `#f07383` | `#c8364c` | Active dial label, dial notch, item numbers, link hover, waves |
+| `--surface` | `#e2e0db` | `#1e1e1d` | Contact sheet background, ripple fill |
+| `--muted` | `#7b7a77` | `#81807c` | Kicker, counter, hint, secondary button border |
+| `--soft` | `#bfbeba` | `#3f3e3c` | Paragraphs |
+| `--line` | `#2d2c2c` | `#cbc9c4` | Pill and preview borders |
+| `--dotline` | `#585756` | `#a1a09c` | Dotted rules above items |
+| `--halo` | 3 shadows in `--bg` | 3 shadows in `--bg` | Text shadow that separates text from dots |
+
+Each derived token is `--fg` mixed toward `--bg` by a fixed amount:
+
+| Token | Mix toward `--bg` |
+| --- | --- |
+| `--surface` | 5% |
+| `--soft` | 20% |
+| `--muted` | 50% |
+| `--dotline` | 65% |
+| `--line` | 84% |
+
+To change the palette, change `--bg`, `--fg`, and `--accent`, then compute the derived tokens again with these amounts.
+
+`script.js` reads `--fg`, `--accent`, `--surface`, and `--bg` from the computed style when the theme changes. The canvas uses no hard-coded colors.
 
 Color rules:
 
-- Do not add accent colors
-- Do not add gradients
-- Do not use shadows as decoration
-- Use stronger borders instead of color for emphasis
-- Use `--color-muted` for supporting copy, not disabled text
+- Use `--accent` only for the active or selected state, and for numbers
+- Use `--soft` for body copy and `--muted` for metadata
+- Do not add new colors. Mix from the existing tokens.
 
-## Typography Tokens
+## Typography
 
-The system uses hard condensed display fonts for headings and monospaced fonts for body copy.
-
-| Token | Use |
-| --- | --- |
-| `--font-display` | Headings, service titles, strong editorial text |
-| `--font-body` | Body copy, labels, navigation, metadata |
-| `--font-size-h1` | Hero headline |
-| `--font-size-h2` | Section headings |
-| `--font-size-h3` | Service and principle titles |
-| `--font-size-lead` | Hero paragraph |
-| `--font-size-body` | Service descriptions and contact links |
-| `--font-size-principle` | Principle panel body copy |
-| `--font-size-small` | Rail metadata values |
-| `--font-size-label` | Labels, eyebrow text, row numbers |
-| `--font-size-nav` | Navigation links |
-| `--font-size-nav-mobile` | Mobile navigation links |
-| `--font-size-nav-tiny` | Very small viewport navigation links |
-| `--font-size-brand` | Desktop brand text |
-| `--font-size-brand-mobile` | Mobile brand text |
-| `--font-size-brand-tiny` | Very small viewport brand text |
-| `--font-size-button` | Button text |
-
-Tracking and line-height tokens:
-
-| Token | Use |
-| --- | --- |
-| `--line-height-tight` | Hero heading |
-| `--line-height-heading` | Section headings |
-| `--line-height-body` | Body copy |
-| `--tracking-label` | Labels and metadata |
-| `--tracking-nav` | Navigation and brand text |
-| `--tracking-heading-lg` | Hero heading |
-| `--tracking-heading-md` | Section headings |
-| `--tracking-heading-sm` | Small headings |
-
-Typography rules:
-
-- Headings are uppercase
-- Headings should be short
-- Paragraphs should be plain and factual
-- Avoid decorative serif typography
-- Avoid friendly rounded typefaces
-- Avoid long marketing claims
-
-## Layout Tokens
-
-The desktop layout is a two-column editorial system: an identity rail on the left and content on the right.
-
-| Token | Use |
-| --- | --- |
-| `--container` | Main desktop page width |
-| `--container-mobile` | Mobile page width |
-| `--rail-width` | Desktop identity rail width |
-| `--content-gap` | Gap between rail and content |
-| `--label-column` | Left label column inside content sections |
-| `--section-gap` | Gap between section label and section body |
-| `--section-y` | Desktop vertical section padding |
-| `--section-y-mobile` | Mobile vertical section padding |
-| `--page-top` | Top offset below header |
-| `--header-top` | Header top offset |
-
-Layout rules:
-
-- Desktop keeps the rail visible
-- Tablet collapses to a single content column
-- Mobile hides the identity rail entirely
-- Content is divided by horizontal borders
-- Services are rows, not cards
-- Mobile spacing is tighter than desktop spacing
-
-## Spacing Tokens
-
-Spacing uses named scale tokens rather than arbitrary values.
+The site uses Geist for text and Geist Mono for labels. Both load from Google Fonts in `site/index.html`.
 
 | Token | Value |
 | --- | --- |
-| `--space-1` | `8px` |
-| `--space-2` | `10px` |
-| `--space-3` | `12px` |
-| `--space-4` | `16px` |
-| `--space-5` | `18px` |
-| `--space-6` | `20px` |
-| `--space-7` | `22px` |
-| `--space-8` | `24px` |
-| `--space-9` | `26px` |
-| `--space-10` | `28px` |
-| `--space-11` | `34px` |
-| `--space-12` | `40px` |
-| `--space-13` | `48px` |
-| `--space-14` | `54px` |
-| `--space-15` | `56px` |
-| `--space-16` | `70px` |
-| `--space-17` | `76px` |
+| `--font-sans` | Geist, then system UI fonts |
+| `--font-mono` | Geist Mono, then system monospace fonts |
 
-Spacing rules:
+| Element | Size | Weight | Line height | Tracking |
+| --- | --- | --- | --- | --- |
+| Intro `h1` | `clamp(34px, 4.4vw, 64px)` | 500 | 1.02 | -0.03em |
+| Section `h2` | `clamp(30px, 3.6vw, 52px)` | 500 | 1.04 | -0.025em |
+| Contact sheet `h2` | `clamp(40px, 7vw, 104px)` | 500 | 0.98 | -0.035em |
+| Item `h3` | `19px` | 500 | normal | -0.01em |
+| Large item `h3`, `.wr-title-lg` | `clamp(22px, 2vw, 28px)` | 500 | normal | -0.02em |
+| Lead paragraph, `.wr-lead` | `clamp(16px, 1.25vw, 19px)` | 400 | 1.55 | normal |
+| Item paragraph | `15px` | 400 | 1.55 | normal |
+| Kicker, numbers, pills | `12px` mono | 400 | normal | 0.06em for the kicker |
+| Hint | `11px` mono | 400 | normal | normal |
 
-- Use existing spacing tokens first
-- Do not add new spacing tokens unless a repeated need appears
-- Keep mobile sections compact
-- Keep desktop sections calm and open
+Typography rules:
 
-## Component Tokens
+- Use sentence case for headings
+- Use uppercase only for the mono kicker
+- Use `text-wrap: balance` on headings and `text-wrap: pretty` on paragraphs
+- Keep lead paragraphs to `60ch` or less
+
+## Layout Tokens
+
+`script.js` computes the layout from the viewport size. It sets these tokens on `[data-root]`. The values in `styles.css` are fallbacks for the first paint and for pages without JavaScript.
 
 | Token | Use |
 | --- | --- |
-| `--button-height` | Base button height |
-| `--button-x` | Button horizontal padding |
-| `--mark-sm` | Header logo size |
-| `--mark-lg` | Rail logo size |
-| `--border` | Standard component border |
-| `--border-strong` | Emphasis border |
-| `--motion-fast` | Small UI transitions |
-| `--motion-reveal` | Reveal transition timing |
+| `--rx` | Left edge of the header, the panel, and the hint |
+| `--ht` | Top of the header |
+| `--hr` | Right edge of the header |
+| `--pt` | Top of the content panel, below the readout |
+| `--pr` | Right edge of the content panel, left of the dial |
+| `--pb` | Bottom of the content panel |
+| `--dz-l`, `--dz-t` | Left and top edges of the dial drag zone |
+| `--hint-d` | `display` value of the hint |
+| `--cnt-d` | `display` value of the section counter |
 
-Component rules:
+Layout modes:
 
-- Components should be rectangular and line-based
-- Avoid soft radius values
-- Avoid decorative shadows
-- Prefer one strong detail over many small effects
+| Mode | Condition | Dial | Dot pitch |
+| --- | --- | --- | --- |
+| Wide | Width 760px or more | Right edge, turns vertically, 54px between labels | 12px |
+| Short | Wide, and height less than 520px | Same as wide. The top area is tighter and the hint is hidden. | 12px |
+| Narrow | Width less than 760px | Bottom edge, turns horizontally, 96px between labels | 10px |
+
+All dots snap to the grid. The readout, the dial, and the panel edges align to the same grid.
+
+## Sections
+
+The page has 9 sections. The order in the HTML is the order on the dial.
+
+| Order | `id` | Dial label | Readout word |
+| --- | --- | --- | --- |
+| 01 | `intro` | Intro | `white rose` |
+| 02 | `position` | Position | `position` |
+| 03 | `work` | Work | `work` |
+| 04 | `products` | Products | `products` |
+| 05 | `principles` | Principles | `principles` |
+| 06 | `proof` | Proof | `proof` |
+| 07 | `about` | About | `about` |
+| 08 | `media` | Media | `media` |
+| 09 | `contact` | Contact | `contact` |
+
+`<html data-section="...">` selects the visible section. A CSS rule in `styles.css` shows only the section with that `id`. The inline script in `<head>` sets the first value from the URL hash, so the right section shows before `script.js` runs.
+
+Current products:
+
+- ContextOwl, `contextowl.co`
+- Finnfisk, `finnfisk.no`
+- cliamp, `cliamp.stream`
+- Flux, `bjarneo.github.io/flux`
+- Detent, `github.com/bjarneo/detent`
 
 ## Components
 
 ### Header
 
-Desktop behavior:
+- Brand on the left: `logo-small.svg` at 22px and the text White Rose
+- Tools on the right: the section counter, the theme pill, and the sound pill
+- The counter shows `01 / 09`. It is hidden in narrow mode.
+- In the light theme, CSS inverts the logo to black
 
-- Fixed at the top
-- Brand on the left
-- Navigation on the right
-- Transparent by default
-- Gains black background and border on scroll
+Markup: `.wr-header`, `.wr-brand`, `.wr-tools`, `.wr-counter`, `.wr-pill`
 
-Mobile behavior:
+### Readout
 
-- Brand is centered
-- Hamburger menu is top right
-- Navigation is hidden until opened
-- Menu closes when a nav link is clicked
-- Menu closes on `Escape`
+The readout shows the readout word of the active section in a dot-matrix font. It sits above the content panel.
 
-Implementation:
+- The font is a 5x9 grid. It has lowercase `a` to `z` and the space only.
+- The readout uses 2x scale when it has 118 or more columns
+- On very small screens, the dot pitch shrinks so that the longest word fits
+- When the section changes, each dot fades to its new value from left to right
 
-- Markup: `.site-header`, `.brand`, `.menu-toggle`, `.nav`
-- State class: `.is-scrolled`
-- Mobile state class: `.is-menu-open`
-- JS: `site/script.js`
+### Dial
 
-### Identity Rail
+The dial is an arc of dots with a notch at its center. The labels sit along the arc.
 
-The identity rail is a desktop structural element.
+- The active label uses `--accent` and scales to 132%
+- The notch dot uses `--accent` and pulses when the dial passes a section
+- The labels fade toward the ends of the arc
+- Labels are `<button>` elements in `<nav aria-label="Sections">`. The active label has `aria-current="true"`.
 
-Desktop:
+### Content Panel
 
-- Shows the large logo
-- Shows short metadata: practice and a focused bullet list
-- Uses a right border to separate the rail from content
+The panel shows the active section and scrolls when the content is taller than the panel.
 
-Mobile:
+- The scrollbar is hidden
+- A mask fades the top 14px and the bottom 36px
+- The panel resets to the top when the section changes
 
-- Hidden completely
-- Brand remains available in the header
+Markup: `.wr-panel`, `.wr-section`, `.wr-prose` for text sections
 
-Implementation:
+### Item Grid
 
-- Markup: `.identity-rail`, `.rail-mark`
-- CSS hides `.identity-rail` at the mobile breakpoint
+Work, products, principles, proof, and media use an auto-fit grid.
 
-### Hero
+| Modifier | Minimum column | Use |
+| --- | --- | --- |
+| `.wr-grid` | 240px | Work and proof |
+| `.wr-grid-products` | 260px, max width 820px | Products |
+| `.wr-grid-principles` | 200px | Principles |
+| `.wr-grid-media` | 220px | Media |
 
-The hero states the offer without decoration.
+Each item has a 2px dotted top rule in `--dotline`, an optional mono number in `--accent`, a title, and one paragraph.
 
-Rules:
+Markup: `.wr-item`, `.wr-num`, `.wr-title-lg`
 
-- One short kicker
-- One direct heading
-- One plain paragraph
-- One primary action
-- No domain link as visible content
+### Buttons
 
-Implementation:
+| Class | Style | Hover |
+| --- | --- | --- |
+| `.wr-btn-primary` | `--fg` fill, `--bg` text | `--accent` fill |
+| `.wr-btn-secondary` | `--bg` fill, 1px `--muted` border | `--fg` border |
+| `.wr-pill` | Small mono pill with a 1px `--line` border | `--muted` border |
 
-- Markup: `.hero`, `.kicker`, `.lead`, `.hero-actions`, `.button`
+All buttons have a 999px radius. Hover styles apply only on devices that can hover.
 
-### Statement
+### Media Cards
 
-The statement section explains the working model.
+- A 16:10 preview with a 6px radius and a 1px `--line` border
+- The white logo sits on `#000000`. The black logo sits on `#f3f2ef`.
+- The wallpaper preview fills the card
+- A mono download link under the text
 
-Rules:
+Markup: `.wr-media`, `.wr-preview`, `.wr-preview-light`, `.wr-download`
 
-- Keep the heading short
-- Keep the paragraph wide enough to avoid awkward wrapping
-- Use the label column on desktop
-- Collapse to one column on mobile
+### Contact Sheet
 
-Implementation detail:
+The contact sheet is a full-screen panel in `--surface` with `--bg` text.
 
-- `.statement p:not(.section-label)` is explicitly placed in grid column 2 on desktop
-- It resets to a normal single column on tablet/mobile
+- "Discuss a project" opens it. `Enter` on the Contact section also opens it.
+- A ripple grows from the button that opened it, then the sheet fades in
+- The close button and `Esc` close it. The ripple then shrinks back.
+- While the sheet is open, the UI layer is `inert` and the sheet has focus
+- When the sheet closes, focus goes back to the button that opened it
 
-### About
+Markup: `.wr-sheet`, `.wr-sheet-close`, `.wr-sheet-email`
 
-The About section is intentionally short.
+## Input
 
-Rules:
+| Input | Result |
+| --- | --- |
+| Mouse wheel or trackpad over the panel | Scrolls the panel. At the panel edge, a new wheel gesture turns the dial. |
+| Mouse wheel elsewhere | Turns the dial |
+| Drag on the dial | Turns the dial. A fast release continues with momentum. |
+| Tap or click on the dial | Goes to the section at that angle |
+| Tap or click on a label | Goes to that section |
+| `ArrowDown`, `ArrowRight`, `PageDown`, `j` | Next section |
+| `ArrowUp`, `ArrowLeft`, `PageUp`, `k` | Previous section |
+| `Home`, `End` | First or last section |
+| `Enter` on the Contact section | Opens the contact sheet |
+| `Esc` | Closes the contact sheet |
+| Vertical swipe that starts at the panel edge | Next or previous section, on touch screens |
+| Link to `#work` or another section id | Goes to that section |
 
-- Keep it to one sentence
-- Link to `https://oever.li` from the section body
-- Do not put the external link directly in the navigation
-- Use the same layout pattern as `.statement`
+Input rules:
 
-### Service Rows
+- Past the first and last section, the dial resists and springs back
+- After the panel reaches its edge, the wheel must pause for 320 ms before it turns the dial
+- A swipe must be at least 60px, shorter than 700 ms, and mostly vertical
+- A swipe changes the section only when it starts at the panel edge. A scroll that reaches the edge does not change the section.
+- Keys with `Alt`, `Ctrl`, or `Meta` go to the browser
+- When the dial settles, `history.replaceState` writes the section id to the URL hash
 
-Services are numbered rows.
+## Mobile
 
-Current services:
+Narrow mode is the phone layout.
 
-- Technical direction
-- Architecture review
-- Development
-- DevSecOps
+- The dial sits 124px above the bottom edge and turns horizontally
+- The labels sit under the notch, so a thumb can reach them
+- The drag zone covers the full width from 56px above the notch to the bottom
+- `overscroll-behavior` stops pull-to-refresh, so swipes do not reload the page
+- On touch screens, pills and the close button are at least 36px tall
+- On touch screens, the hint and the `Esc` key label are hidden
+- Below 360px wide, the header uses smaller gaps so that it fits on one line
+- On Android, the phone vibrates for each section while you drag the dial, if sound is on
 
-Rules:
+Check every change at 320px, 360px, and 390px wide, and on a phone in landscape.
 
-- Keep row titles short
-- Keep descriptions one sentence
-- Use borders rather than cards
-- Collapse to one column on mobile
+## Theme
 
-Implementation:
+| Choice | Result |
+| --- | --- |
+| Dark | Default |
+| Light | Light tokens |
+| System | Follows `prefers-color-scheme` |
 
-- Markup: `.service-list`, `.service`
+The theme pill cycles from Dark to Light to System. The choice is stored in `localStorage` under `white-rose-theme`. The inline script in `<head>` applies the stored theme before the first paint. `script.js` also updates `<meta name="theme-color">` to the current `--bg`.
 
-### Principle Panels
+## Sound
 
-Principles are compact panels.
+- A short tick plays each time the dial passes a section
+- A stronger tick plays when the contact sheet opens or closes
+- Sound is on by default. The choice is stored in `localStorage` under `white-rose-sound`.
+- The audio context starts on the first click, tap, or key press. Browsers block audio before that.
 
-Current principles:
+## Motion
 
-- Readable
-- Durable
-- Exact
+| Motion | Duration | Trigger |
+| --- | --- | --- |
+| Section enters, 10px rise and fade | 380 ms | Section change |
+| Wave of accent dots from the notch | Up to 900 ms | Page load and dial settle |
+| Ripple across the dot grid | 640 ms | Contact sheet opens or closes |
+| Contact sheet fade | 240 ms | Contact sheet opens |
+| UI layer fade | 220 ms | Contact sheet opens or closes |
 
-Rules:
+The canvas draws only while something moves. It stops when the dial, the readout, the waves, and the ripple are all at rest.
 
-- Keep the title one word if possible
-- Keep descriptions short
-- Reduce padding on mobile
+With `prefers-reduced-motion: reduce`, the page skips the section animation, the waves, the ripple, and the fades. The dial still moves, because it follows direct input.
 
-Implementation:
+## Without JavaScript
 
-- Markup: `.principle-grid`, `.principle`
+The inline script in `<head>` adds the `js` class to `<html>`. Without it:
 
-### Contact
+- All sections show in one scrolling column in the panel
+- Elements with `data-js-only` are hidden. These are the tools, the dial labels, the hint, and the copy button.
+- Links and email links still work
 
-Contact is minimal.
+## Accessibility
 
-Rules:
-
-- Show email only as visible contact detail
-- Use `mailto:` for the email link
-- Do not show the domain as a visible link
-- Keep metadata domain references for Open Graph, Twitter, and GitHub Pages
-
-Implementation:
-
-- Markup: `.contact`, `.contact-link`
+- The canvas has `aria-hidden="true"`. All content is real HTML.
+- Each section has an `id` and a heading that labels it
+- Focus shows a 2px `--accent` outline
+- The contact sheet has `role="dialog"` and `aria-modal="true"`
+- The sound pill has `aria-pressed`
 
 ## Logo Assets
 
@@ -369,7 +363,7 @@ Logo rules:
 - Use the PNG tiles in documents and on white backgrounds
 - Keep the logo square
 - Preserve equal padding on all sides
-- Use the logo only in black and white
+- Use the logo only in black and white. Do not use the accent color on the logo.
 - Do not stretch, skew, rotate, recolor, or crop tighter
 - Do not place the logo on color backgrounds
 
@@ -377,73 +371,29 @@ See `pdf.md` for document and PDF logo usage.
 
 ## Metadata
 
-Metadata is implemented in `site/index.html`.
+Metadata is in the `<head>` of `site/index.html`.
 
 Required metadata:
 
 - `<title>`
 - `meta[name="description"]`
-- `theme-color`
-- Open Graph title, description, URL, image, image size, image alt
-- Twitter card title, description, image, image alt
-- Favicons and Apple touch icon
+- `meta[name="theme-color"]`
+- The canonical link
+- The JSON-LD schema for the business, the website, and the founder
+- Open Graph title, description, URL, image, image size, and image alt
+- Twitter card title, description, image, and image alt
+- Favicons and the Apple touch icon
+- The Google tag
 
 Metadata rules:
 
 - Keep `https://whiterose.no` in metadata
-- Do not show `whiterose.no` as a visible page link unless intentionally reintroduced
-- Keep social image at `1200x630`
-
-## Motion
-
-Motion is minimal and functional.
-
-Allowed:
-
-- Header scroll state
-- Mobile menu open/close
-- Subtle reveal on scroll
-- Border color changes on hover
-
-Avoid:
-
-- Parallax
-- Decorative animation
-- Animated gradients
-- Large hover movement
-- Motion required to understand content
-
-Implementation:
-
-- `site/script.js` toggles `.is-scrolled`
-- `site/script.js` toggles `.is-menu-open`
-- `IntersectionObserver` reveals `.reveal` elements
-- `prefers-reduced-motion` disables meaningful transitions
-
-## Responsive Behavior
-
-Breakpoints:
-
-| Breakpoint | Behavior |
-| --- | --- |
-| `max-width: 980px` | Collapse rail/content layout to one column |
-| `max-width: 640px` | Mobile header, hamburger nav, hidden rail, compact sections |
-| `max-width: 380px` | Smaller heading and nav scale |
-
-Mobile rules:
-
-- Hide the identity rail
-- Center the brand in the header
-- Place hamburger top right
-- Remove the viewport border wrapper
-- Use tighter vertical section spacing
-- Make service rows single-column
-- Make buttons full-width
-- Allow contact links to wrap safely
+- Keep the social image at 1200x630
+- Update `<lastmod>` in `site/sitemap.xml` when the content changes
 
 ## Content Voice
 
-White Rose is positioned as a software engineering consultancy that also does hands-on development and DevSecOps.
+White Rose is a software engineering consultancy that also does hands-on development and DevSecOps.
 
 Use:
 
@@ -464,20 +414,30 @@ Avoid:
 
 ## Extension Rules
 
-When adding a new section or component:
+To add a section:
 
-- Start with semantic HTML
-- Reuse existing tokens
-- Use borders for separation
-- Keep it monochrome
+1. Add a `<section class="wr-section" id="..." data-section data-word="...">` to `<main>` in `site/index.html`.
+2. Add a label `<button type="button" data-i="...">` to the `[data-labels]` nav at the same position.
+3. Update the `data-i` values of the labels after it, so that they count from 0 in order.
+4. Add the id to the list of `.js[data-section="..."]` selectors in `site/styles.css`.
+5. Update the `01 / 09` fallback text in `.wr-counter`.
+
+Use only lowercase `a` to `z` and spaces in `data-word`. The readout font has no other glyphs. Keep the word to 10 characters or less. A longer word makes the readout shrink on small screens.
+
+To add a product, add an `.wr-item` to the products grid and number it in order.
+
+When you change the site:
+
+- Reuse the color and type tokens before you add values
+- Keep one accent color
+- Use dotted rules and spacing to separate items
 - Keep copy short
-- Check mobile at `640px` and below
-- Verify no gradients are introduced
-- Push both `main` and `gh-pages` when deploying site changes
 
 Before shipping:
 
-- Check `site/index.html` for visible domain links if not intended
-- Check `site/styles.css` for gradients or one-off color additions
-- Check `site/assets/` for correct logo usage
-- Check GitHub Pages build status after deployment
+- Check the page at 320px, 360px, and 390px wide, on a phone in landscape, and on desktop
+- Check the dial with touch, mouse, wheel, and keyboard
+- Check both themes
+- Check the page with JavaScript turned off
+- Check the browser console for errors
+- Push to `main` and check that the Pages workflow succeeds

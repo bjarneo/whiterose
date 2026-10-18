@@ -84,7 +84,7 @@ Rules:
 
 ## Typography
 
-Match the website direction but optimize for documents.
+Use these type roles for documents. They differ from the website, which uses Geist.
 
 Recommended type roles:
 
@@ -383,9 +383,13 @@ Use the website system for:
 
 - Brand tone
 - Logo assets
-- Monochrome discipline
-- Typography direction
 - Structural restraint
+
+Do not copy these website features into PDFs:
+
+- The rose accent color. Documents stay black and white.
+- The Geist typefaces. Documents use the type roles in this guide.
+- The dot grid and the dial
 
 Adapt for PDFs:
 

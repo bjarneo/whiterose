@@ -78,9 +78,10 @@
         color: inherit;
       }
 
+      /* Each page is exactly one A4 sheet. Content that does not fit shows as overflow in the PDF. */
       .page {
         width: 210mm;
-        min-height: 297mm;
+        height: 297mm;
         break-after: page;
       }
 
@@ -99,7 +100,7 @@
       .cover-inner {
         display: grid;
         align-content: space-between;
-        min-height: 269mm;
+        min-height: 0;
         border: 1px solid rgba(255, 255, 255, 0.22);
         padding: 16mm;
       }
@@ -129,6 +130,8 @@
       }
 
       .document-page {
+        display: flex;
+        flex-direction: column;
         padding: 14mm;
       }
 
@@ -142,7 +145,7 @@
       }
 
       .page-footer {
-        margin-top: 12mm;
+        margin-top: auto;
         border-top: 1px solid var(--line);
         border-bottom: 0;
         padding-top: 5mm;
@@ -251,6 +254,41 @@
         background: var(--surface);
       }
 
+      .swatch.web-bg {
+        color: #edebe6;
+        background: #080808;
+        border-color: #080808;
+      }
+
+      .swatch.web-text {
+        background: #edebe6;
+      }
+
+      .swatch.web-accent {
+        background: #f07383;
+        border-color: #f07383;
+      }
+
+      .swatch.web-muted {
+        color: var(--white);
+        background: #7b7a77;
+        border-color: #7b7a77;
+      }
+
+      .swatch.web-bg p,
+      .swatch.web-muted p {
+        color: inherit;
+      }
+
+      .swatch.web-accent p {
+        color: var(--text);
+      }
+
+      .swatch-note {
+        margin: 4mm 0 0;
+        font-size: 8.5pt;
+      }
+
       .logo-panel {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -349,17 +387,6 @@
         </ul>
       </section>
 
-      <section class="section section-grid">
-        <p class="section-label">Working Model</p>
-        <ul class="rule-list">
-          <li>Understand the system.</li>
-          <li>Explain the tradeoffs.</li>
-          <li>Help decide what to build, simplify, or avoid.</li>
-          <li>Support implementation when needed.</li>
-          <li>Keep recommendations clear and practical.</li>
-        </ul>
-      </section>
-
       <footer class="page-footer">
         <span>White Rose</span>
         <span>Brand guide / 01</span>
@@ -375,31 +402,34 @@
       <section class="section section-grid">
         <p class="section-label">Direction</p>
         <div class="wide-copy">
-          <h2>Black, white, sharp, minimal.</h2>
-          <p>The visual direction uses strong typography, clear spacing, thin borders, and the White Rose logo as the main visual mark.</p>
-          <p>Avoid gradients, color accents, soft decorative elements, stock imagery, and unnecessary effects.</p>
+          <h2>Dark, exact, one accent.</h2>
+          <p>The website uses a dark dot grid, a rotary dial, and a dot-matrix readout. It shows one section at a time.</p>
+          <p>Use one rose accent for the active state only. Avoid gradients, extra colors, stock imagery, and unnecessary effects. Documents and PDFs stay black and white.</p>
         </div>
       </section>
 
       <section class="section section-grid">
         <p class="section-label">Color</p>
-        <div class="swatch-row">
-          <div class="swatch black">
-            <span class="meta-label">Black</span>
-            <p>#000000</p>
+        <div>
+          <div class="swatch-row">
+            <div class="swatch web-bg">
+              <span class="meta-label">Background</span>
+              <p>#080808</p>
+            </div>
+            <div class="swatch web-text">
+              <span class="meta-label">Text</span>
+              <p>#edebe6</p>
+            </div>
+            <div class="swatch web-accent">
+              <span class="meta-label">Accent</span>
+              <p>#f07383</p>
+            </div>
+            <div class="swatch web-muted">
+              <span class="meta-label">Muted</span>
+              <p>#7b7a77</p>
+            </div>
           </div>
-          <div class="swatch white">
-            <span class="meta-label">White</span>
-            <p>#ffffff</p>
-          </div>
-          <div class="swatch muted">
-            <span class="meta-label">Muted</span>
-            <p>#9a9a9a</p>
-          </div>
-          <div class="swatch surface">
-            <span class="meta-label">Surface</span>
-            <p>#f4f4f4</p>
-          </div>
+          <p class="swatch-note">Website dark theme. Documents use black #000000, white #ffffff, and gray only.</p>
         </div>
       </section>
 
@@ -407,22 +437,13 @@
         <p class="section-label">Typography</p>
         <div class="two-col">
           <div>
-            <h3>Display</h3>
-            <p>Use condensed, hard, uppercase headings. Keep headings short.</p>
+            <h3>Website</h3>
+            <p>Use Geist for text and Geist Mono for labels and numbers. Use sentence case and short headings.</p>
           </div>
           <div>
-            <h3>Body</h3>
-            <p>Use plain monospaced or neutral sans text. Keep copy direct and factual.</p>
+            <h3>Documents</h3>
+            <p>Use a condensed bold sans for titles and a monospace for body text and numbers.</p>
           </div>
-        </div>
-      </section>
-
-      <section class="section section-grid">
-        <p class="section-label">Name</p>
-        <div class="wide-copy">
-          <h2>Use White Rose.</h2>
-          <p>Use `White Rose` as the primary written name. `Whiterose` can be used as a secondary styling when needed.</p>
-          <p>The name should be tied to clear software engineering work, not floral or decorative language.</p>
         </div>
       </section>
 
@@ -449,19 +470,52 @@
               <img src="../site/assets/logo-512.png" alt="White Rose logo on dark background">
             </div>
           </div>
-          <p class="note">Use the existing PNG logo assets. Keep the mark square and preserve equal padding on all sides.</p>
+          <p class="note">Use the logo files in site/assets. Keep the mark square and preserve equal padding on all sides.</p>
         </div>
       </section>
 
       <section class="section section-grid">
         <p class="section-label">Rules</p>
         <ul class="rule-list">
-          <li>Use PNG assets only.</li>
+          <li>Use the SVG marks on the website and the PNG tiles in documents.</li>
+          <li>Use the logo only in black and white. Do not use the accent color on the logo.</li>
           <li>Do not stretch, skew, rotate, recolor, or crop the logo tighter.</li>
           <li>Do not add shadows, glows, outlines, or effects.</li>
           <li>Do not place the logo over photography or patterns.</li>
           <li>Keep at least one quarter of the logo width as clear space around the mark.</li>
         </ul>
+      </section>
+
+      <footer class="page-footer">
+        <span>White Rose</span>
+        <span>Brand guide / 03</span>
+      </footer>
+    </section>
+
+    <section class="page document-page">
+      <header class="page-header">
+        <img class="small-logo" src="../site/assets/logo-192.png" alt="White Rose logo">
+        <span class="doc-label">Working Model</span>
+      </header>
+
+      <section class="section section-grid">
+        <p class="section-label">Working Model</p>
+        <ul class="rule-list">
+          <li>Understand the system.</li>
+          <li>Explain the tradeoffs.</li>
+          <li>Help decide what to build, simplify, or avoid.</li>
+          <li>Support implementation when needed.</li>
+          <li>Keep recommendations clear and practical.</li>
+        </ul>
+      </section>
+
+      <section class="section section-grid">
+        <p class="section-label">Name</p>
+        <div class="wide-copy">
+          <h2>Use White Rose.</h2>
+          <p>Use `White Rose` as the primary written name. `Whiterose` can be used as a secondary styling when needed.</p>
+          <p>The name should be tied to clear software engineering work, not floral or decorative language.</p>
+        </div>
       </section>
 
       <section class="section section-grid">
@@ -475,7 +529,7 @@
 
       <footer class="page-footer">
         <span>White Rose</span>
-        <span>Brand guide / 03</span>
+        <span>Brand guide / 04</span>
       </footer>
     </section>
   </body>
