@@ -17,15 +17,20 @@
       content="White Rose provides software engineering consultancy, hands-on development, DevSecOps, technical direction, and architecture review."
     >
     <script>
-      try {
-        const theme = localStorage.getItem("white-rose-theme");
-        if (theme === "light" || theme === "dark") {
-          document.documentElement.dataset.theme = theme;
-        }
-      } catch {}
+      (() => {
+        const root = document.documentElement;
+        let theme = "dark";
+        try {
+          const stored = localStorage.getItem("white-rose-theme");
+          if (stored === "light" || stored === "system") theme = stored;
+        } catch {}
+        if (theme === "system") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        root.dataset.theme = theme;
+        root.dataset.section = location.hash.slice(1) || "intro";
+        root.classList.add("js");
+      })();
     </script>
-    <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#080808">
     <meta name="application-name" content="White Rose">
     <meta name="apple-mobile-web-app-title" content="White Rose">
     <link rel="canonical" href="https://whiterose.no/">
@@ -151,225 +156,228 @@
     <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
   </head>
   <body>
-    <header class="site-header" data-header>
-      <a class="brand" href="#top" aria-label="White Rose home">
-        <img class="brand-mark" src="assets/logo-small.svg" alt="White Rose logo">
-        <span>White Rose</span>
-      </a>
-      <div class="header-actions">
-        <nav class="nav" id="primary-nav" aria-label="Primary navigation">
-          <a href="#work">Work</a>
-          <a href="#products">Products</a>
-          <a href="#principles">Principles</a>
-          <a href="#about">About</a>
-          <a href="#media">Media</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <button class="theme-toggle" type="button" data-theme-toggle>
-          <span class="theme-indicator" aria-hidden="true"></span>
-          <span data-theme-label>System</span>
-        </button>
-        <button class="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false">
-          <span>Menu</span>
-          <span class="menu-icon" aria-hidden="true"></span>
-        </button>
-      </div>
-    </header>
+    <div class="wr" data-root data-contact="closed">
+      <canvas class="wr-canvas" data-canvas aria-hidden="true"></canvas>
+      <div class="wr-zone" data-zone aria-hidden="true"></div>
 
-    <main class="page" id="top">
-      <div class="content">
-        <section class="hero reveal" aria-labelledby="hero-title">
-          <p class="kicker">Software engineering consultancy</p>
-          <h1 id="hero-title">White Rose software engineering consultancy.</h1>
-          <p class="lead">
-            White Rose reviews software systems, plans technical work, clarifies engineering decisions,
-            and delivers hands-on development with DevSecOps. The focus is practical engineering support
-            for teams that need clear direction, safer delivery, and maintainable software without unnecessary process.
-          </p>
-          <div class="hero-actions">
-            <a class="button primary" href="#work">View services</a>
-            <a class="button secondary" href="#contact">Discuss a project</a>
+      <div class="wr-ui" data-ui>
+        <header class="wr-header">
+          <a class="wr-brand" href="#intro" aria-label="White Rose home">
+            <img src="assets/logo-small.svg" alt="" width="22" height="22">
+            <span>White Rose</span>
+          </a>
+          <div class="wr-tools" data-js-only>
+            <span class="wr-counter" data-counter aria-hidden="true">01 / 09</span>
+            <button class="wr-pill" type="button" data-theme-toggle>Dark</button>
+            <button class="wr-pill" type="button" data-sound-toggle aria-pressed="true">Sound on</button>
           </div>
-        </section>
+        </header>
 
-        <section class="statement reveal" aria-labelledby="statement-title">
-          <p class="section-label">Position</p>
-          <h2 id="statement-title">Clear technical advice.</h2>
-          <p>
-            The work is simple: understand the system, explain the tradeoffs,
-            and help with the implementation when needed. That can mean a short architecture review,
-            a focused delivery plan, a security-minded deployment path, or direct development alongside your team.
-          </p>
-        </section>
+        <main class="wr-panel" data-panel>
+          <section class="wr-section wr-prose" id="intro" data-section data-word="white rose" aria-labelledby="intro-title">
+            <p class="wr-kicker">Software engineering consultancy</p>
+            <h1 id="intro-title">White Rose software engineering consultancy.</h1>
+            <p class="wr-lead">
+              White Rose reviews software systems, plans technical work, clarifies engineering decisions,
+              and delivers hands-on development with DevSecOps. The focus is practical engineering support
+              for teams that need clear direction, safer delivery, and maintainable software without unnecessary process.
+            </p>
+            <div class="wr-actions">
+              <a class="wr-btn wr-btn-primary" href="#work">View services</a>
+              <a class="wr-btn wr-btn-secondary" href="#contact" data-open-contact>Discuss a project</a>
+            </div>
+          </section>
 
-        <section class="work" id="work" aria-labelledby="work-title">
-          <div class="section-head reveal">
-            <p class="section-label">Work</p>
+          <section class="wr-section wr-prose" id="position" data-section data-word="position" aria-labelledby="position-title">
+            <h2 id="position-title">Clear technical advice.</h2>
+            <p class="wr-lead">
+              The work is simple: understand the system, explain the tradeoffs, and help with the implementation
+              when needed. That can mean a short architecture review, a focused delivery plan, a security-minded
+              deployment path, or direct development alongside your team.
+            </p>
+          </section>
+
+          <section class="wr-section" id="work" data-section data-word="work" aria-labelledby="work-title">
             <h2 id="work-title">What White Rose does</h2>
-          </div>
+            <div class="wr-grid">
+              <article class="wr-item">
+                <span class="wr-num">01</span>
+                <h3>Technical direction</h3>
+                <p>Help decide what to build, what to simplify, and what to avoid before a roadmap becomes costly.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">02</span>
+                <h3>Architecture review</h3>
+                <p>Review systems, codebases, and infrastructure to find reliability risks, security gaps, bottlenecks, and unnecessary complexity.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">03</span>
+                <h3>Development</h3>
+                <p>Build features, integrations, backend services, and internal tooling with maintainability, observability, deployment, and handover in mind.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">04</span>
+                <h3>DevSecOps</h3>
+                <p>Support deployment, infrastructure, automation, reliability, and security workflows so releases are easier to repeat, inspect, and recover from.</p>
+              </article>
+            </div>
+          </section>
 
-          <div class="service-list">
-            <article class="service reveal">
-              <span>01</span>
-              <h3>Technical direction</h3>
-              <p>Help decide what to build, what to simplify, and what to avoid before a roadmap becomes costly.</p>
-            </article>
-            <article class="service reveal">
-              <span>02</span>
-              <h3>Architecture review</h3>
-              <p>Review systems, codebases, and infrastructure to find reliability risks, security gaps, bottlenecks, and unnecessary complexity.</p>
-            </article>
-            <article class="service reveal">
-              <span>03</span>
-              <h3>Development</h3>
-              <p>Build features, integrations, backend services, and internal tooling with maintainability, observability, deployment, and handover in mind.</p>
-            </article>
-            <article class="service reveal">
-              <span>04</span>
-              <h3>DevSecOps</h3>
-              <p>Support deployment, infrastructure, automation, reliability, and security workflows so releases are easier to repeat, inspect, and recover from.</p>
-            </article>
-          </div>
-        </section>
-
-        <section class="products" id="products" aria-labelledby="products-title">
-          <div class="section-head reveal">
-            <p class="section-label">Products</p>
+          <section class="wr-section" id="products" data-section data-word="products" aria-labelledby="products-title">
             <h2 id="products-title">Products White Rose owns</h2>
-          </div>
+            <div class="wr-grid wr-grid-products">
+              <article class="wr-item">
+                <span class="wr-num">01</span>
+                <h3 class="wr-title-lg"><a href="https://contextowl.co" target="_blank" rel="noopener">ContextOwl ↗</a></h3>
+                <p><a href="https://contextowl.co" target="_blank" rel="noopener">contextowl.co</a> is a product owned by White Rose.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">02</span>
+                <h3 class="wr-title-lg"><a href="https://finnfisk.no" target="_blank" rel="noopener">Finnfisk ↗</a></h3>
+                <p><a href="https://finnfisk.no" target="_blank" rel="noopener">finnfisk.no</a> is a sport fishing guide for Innlandet, owned by White Rose.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">03</span>
+                <h3 class="wr-title-lg"><a href="https://cliamp.stream" target="_blank" rel="noopener">cliamp ↗</a></h3>
+                <p><a href="https://cliamp.stream" target="_blank" rel="noopener">cliamp.stream</a> is a terminal music player inspired by Winamp, owned by White Rose.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">04</span>
+                <h3 class="wr-title-lg"><a href="https://bjarneo.github.io/flux/" target="_blank" rel="noopener">Flux ↗</a></h3>
+                <p><a href="https://bjarneo.github.io/flux/" target="_blank" rel="noopener">Flux</a> connects an Omarchy computer to a phone for files, clipboard, notifications, and media. It is owned by White Rose.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">05</span>
+                <h3 class="wr-title-lg"><a href="https://github.com/bjarneo/detent" target="_blank" rel="noopener">Detent ↗</a></h3>
+                <p><a href="https://github.com/bjarneo/detent" target="_blank" rel="noopener">Detent</a> is an Android home screen that you turn, owned by White Rose. Apps sit on a dial at the edge of the screen.</p>
+              </article>
+            </div>
+          </section>
 
-          <div class="service-list">
-            <article class="service reveal">
-              <span>01</span>
-              <a class="product-name" href="https://contextowl.co">
-                <img class="product-logo" src="assets/contextowl-logo-light.svg" alt="">
-                <h3>ContextOwl</h3>
-              </a>
-              <p><a class="text-link" href="https://contextowl.co">contextowl.co</a> is a product owned by White Rose.</p>
-            </article>
-
-            <article class="service reveal">
-              <span>02</span>
-              <a class="product-name" href="https://finnfisk.no">
-                <h3>Finnfisk</h3>
-              </a>
-              <p><a class="text-link" href="https://finnfisk.no">finnfisk.no</a> is a sport fishing guide for Innlandet, owned by White Rose.</p>
-            </article>
-          </div>
-        </section>
-
-        <section class="principles" id="principles" aria-labelledby="principles-title">
-          <div class="section-head reveal">
-            <p class="section-label">Principles</p>
+          <section class="wr-section" id="principles" data-section data-word="principles" aria-labelledby="principles-title">
             <h2 id="principles-title">How the work is done</h2>
-          </div>
-
-          <div class="principle-grid">
-            <div class="principle reveal">
-              <h3>Readable</h3>
-              <p>Recommendations should be easy to understand and act on.</p>
+            <div class="wr-grid wr-grid-principles">
+              <article class="wr-item">
+                <h3 class="wr-title-lg">Readable</h3>
+                <p>Recommendations should be easy to understand and act on.</p>
+              </article>
+              <article class="wr-item">
+                <h3 class="wr-title-lg">Durable</h3>
+                <p>Advice should avoid unnecessary complexity.</p>
+              </article>
+              <article class="wr-item">
+                <h3 class="wr-title-lg">Exact</h3>
+                <p>Technical choices should match the actual constraints.</p>
+              </article>
             </div>
-            <div class="principle reveal">
-              <h3>Durable</h3>
-              <p>Advice should avoid unnecessary complexity.</p>
+          </section>
+
+          <section class="wr-section" id="proof" data-section data-word="proof" aria-labelledby="proof-title">
+            <h2 id="proof-title">Practical engineering signals</h2>
+            <div class="wr-grid">
+              <article class="wr-item">
+                <span class="wr-num">01</span>
+                <h3>Senior judgment</h3>
+                <p>Work starts with the actual system, constraints, risks, and tradeoffs before recommending a direction.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">02</span>
+                <h3>Implementation support</h3>
+                <p>Advice can continue into hands-on development, automation, deployment, reliability, and security work.</p>
+              </article>
+              <article class="wr-item">
+                <span class="wr-num">03</span>
+                <h3>Public technical profile</h3>
+                <p>Review public engineering work on <a href="https://github.com/bjarneo" target="_blank" rel="noopener">GitHub</a> or read more at <a href="https://oever.li" target="_blank" rel="noopener">oever.li</a>.</p>
+              </article>
             </div>
-            <div class="principle reveal">
-              <h3>Exact</h3>
-              <p>Technical choices should match the actual constraints.</p>
-            </div>
-          </div>
-        </section>
+          </section>
 
-        <section class="signals" aria-labelledby="signals-title">
-          <div class="section-head reveal">
-            <p class="section-label">Proof</p>
-            <h2 id="signals-title">Practical engineering signals</h2>
-          </div>
+          <section class="wr-section wr-prose" id="about" data-section data-word="about" aria-labelledby="about-title">
+            <h2 id="about-title">About Bjarne</h2>
+            <p class="wr-lead">
+              Bjarne works with software engineering, infrastructure, DevSecOps, and practical technical direction.
+              Projects often combine architecture review, hands-on programming, platform automation, and advisory support
+              for teams that need an experienced engineer to move critical software work forward.
+              <a class="wr-strong-link" href="https://github.com/bjarneo" target="_blank" rel="noopener">View GitHub</a>
+              or <a class="wr-strong-link" href="https://oever.li" target="_blank" rel="noopener">read more at oever.li</a>.
+            </p>
+          </section>
 
-          <div class="service-list">
-            <article class="service reveal">
-              <span>01</span>
-              <h3>Senior judgment</h3>
-              <p>Work starts with the actual system, constraints, risks, and tradeoffs before recommending a direction.</p>
-            </article>
-            <article class="service reveal">
-              <span>02</span>
-              <h3>Implementation support</h3>
-              <p>Advice can continue into hands-on development, automation, deployment, reliability, and security work.</p>
-            </article>
-            <article class="service reveal">
-              <span>03</span>
-              <h3>Public technical profile</h3>
-              <p>Review public engineering work on <a class="text-link" href="https://github.com/bjarneo">GitHub</a> or read more at <a class="text-link" href="https://oever.li">oever.li</a>.</p>
-            </article>
-          </div>
-        </section>
-
-        <section class="statement reveal" id="about" aria-labelledby="about-title">
-          <p class="section-label">About</p>
-          <h2 id="about-title">About Bjarne</h2>
-          <p>
-            Bjarne works with software engineering, infrastructure, DevSecOps, and practical technical direction.
-            Projects often combine architecture review, hands-on programming, platform automation, and advisory support
-            for teams that need an experienced engineer to move critical software work forward. <a class="text-link" href="https://github.com/bjarneo">View GitHub</a> or <a class="text-link" href="https://oever.li">read more at oever.li</a>.
-          </p>
-        </section>
-
-        <section class="media" id="media" aria-labelledby="media-title">
-          <div class="section-head reveal">
-            <p class="section-label">Media</p>
+          <section class="wr-section" id="media" data-section data-word="media" aria-labelledby="media-title">
             <h2 id="media-title">Brand assets for external use</h2>
-          </div>
-
-          <div class="media-grid">
-            <article class="media-card reveal">
-              <div class="media-preview logo-preview">
-                <img src="assets/logo.svg" alt="White Rose logo mark">
-              </div>
-              <div class="media-copy">
+            <div class="wr-grid wr-grid-media">
+              <article class="wr-media">
+                <div class="wr-preview">
+                  <img src="assets/logo.svg" alt="White Rose logo mark" loading="lazy">
+                </div>
                 <h3>Logo mark, white</h3>
                 <p>Transparent SVG for dark backgrounds, press, partner pages, and external references.</p>
-                <a class="media-link" href="assets/logo.svg" download>Download SVG</a>
-              </div>
-            </article>
-            <article class="media-card reveal">
-              <div class="media-preview logo-preview logo-preview-light">
-                <img src="assets/logo-black.svg" alt="White Rose black logo mark">
-              </div>
-              <div class="media-copy">
+                <a class="wr-download" href="assets/logo.svg" download>Download SVG</a>
+              </article>
+              <article class="wr-media">
+                <div class="wr-preview wr-preview-light">
+                  <img src="assets/logo-black.svg" alt="White Rose black logo mark" loading="lazy">
+                </div>
                 <h3>Logo mark, black</h3>
                 <p>Transparent SVG for light backgrounds and monochrome external use.</p>
-                <a class="media-link" href="assets/logo-black.svg" download>Download SVG</a>
-              </div>
-            </article>
-            <article class="media-card reveal">
-              <div class="media-preview wallpaper-preview">
-                <img src="assets/white-rose-wallpaper.png" alt="White Rose dark wallpaper preview">
-              </div>
-              <div class="media-copy">
+                <a class="wr-download" href="assets/logo-black.svg" download>Download SVG</a>
+              </article>
+              <article class="wr-media">
+                <div class="wr-preview">
+                  <img class="wr-cover" src="assets/white-rose-wallpaper.png" alt="White Rose dark wallpaper preview" loading="lazy">
+                </div>
                 <h3>Wallpaper</h3>
                 <p>Vantablack wallpaper with the White Rose mark, sized for desktop backgrounds.</p>
-                <a class="media-link" href="assets/white-rose-wallpaper.png" download>Download PNG</a>
-              </div>
-            </article>
-          </div>
-        </section>
+                <a class="wr-download" href="assets/white-rose-wallpaper.png" download>Download PNG</a>
+              </article>
+            </div>
+          </section>
 
-        <section class="contact reveal" id="contact" aria-labelledby="contact-title">
-          <p class="section-label">Contact</p>
-          <h2 id="contact-title">Need help with a technical decision?</h2>
-          <div class="contact-actions">
-            <a class="contact-link" href="mailto:bjarne@oever.li">bjarne@oever.li</a>
-            <button class="copy-button" type="button" data-copy="bjarne@oever.li" aria-label="Copy email address">
-              <span class="copy-icon" aria-hidden="true"></span>
-            </button>
-          </div>
-        </section>
+          <section class="wr-section wr-prose" id="contact" data-section data-word="contact" aria-labelledby="contact-title">
+            <h2 id="contact-title">Need help with a technical decision?</h2>
+            <a class="wr-email" href="mailto:bjarne@oever.li">bjarne@oever.li</a>
+            <div class="wr-actions">
+              <a class="wr-btn wr-btn-primary" href="mailto:bjarne@oever.li">Write email</a>
+              <button class="wr-btn wr-btn-secondary" type="button" data-copy="bjarne@oever.li" data-js-only>Copy email</button>
+            </div>
+          </section>
+        </main>
+
+        <div class="wr-hint" data-js-only>
+          <span>Scroll, drag the dial, or use ↑ ↓</span>
+        </div>
+
+        <nav class="wr-labels" data-labels aria-label="Sections" data-js-only>
+          <button type="button" data-i="0">Intro</button>
+          <button type="button" data-i="1">Position</button>
+          <button type="button" data-i="2">Work</button>
+          <button type="button" data-i="3">Products</button>
+          <button type="button" data-i="4">Principles</button>
+          <button type="button" data-i="5">Proof</button>
+          <button type="button" data-i="6">About</button>
+          <button type="button" data-i="7">Media</button>
+          <button type="button" data-i="8">Contact</button>
+        </nav>
       </div>
-    </main>
+
+      <div class="wr-sheet" data-sheet role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+        <button class="wr-sheet-close" type="button" data-close>Close<span class="wr-key"> · Esc</span></button>
+        <p class="wr-sheet-kicker">Contact</p>
+        <h2 id="sheet-title">Need help with a technical decision?</h2>
+        <a class="wr-sheet-email" href="mailto:bjarne@oever.li">bjarne@oever.li</a>
+        <div class="wr-actions">
+          <a class="wr-btn wr-btn-primary" href="mailto:bjarne@oever.li">Write email</a>
+          <button class="wr-btn wr-btn-secondary" type="button" data-copy="bjarne@oever.li">Copy email</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
